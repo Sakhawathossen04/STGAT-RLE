@@ -4,7 +4,7 @@
 
 ---
 
-## 📄 File
+##  File
 
 | File | Description |
 |------|-------------|
@@ -12,7 +12,7 @@
 
 ---
 
-## 📌 Overview
+##  Overview
 
 Radio link failures in **Mobile Ad hoc Networks (MANETs)** cause packet loss and costly reactive rerouting. This project proposes **STGAT** — a Spatio-Temporal Graph Attention Transformer — that fuses two complementary views of the network:
 
@@ -23,7 +23,7 @@ The fused representation is passed through an MLP classifier trained with **Foca
 
 ---
 
-## 🏗️ Pipeline
+##  Pipeline
 
 ```
 Phase 1  →  Setup, dependencies, dataset loading
@@ -45,7 +45,7 @@ Phase 11 →  Model checkpointing
 
 ---
 
-## 🧠 Models Compared
+##  Models Compared
 
 | Model | Type |
 |-------|------|
@@ -60,7 +60,7 @@ All models are evaluated on **F1, Precision, Recall, AUC-ROC, Average Precision,
 
 ---
 
-## ✨ Key Features
+##  Key Features
 
 - **Graph-based spatial modeling** — k-NN transmitter graph with 2-layer GATConv (`add_self_loops=False` for compatibility)
 - **Focal Loss** (α = 0.75, γ = 2.0) to address class imbalance
@@ -72,7 +72,7 @@ All models are evaluated on **F1, Precision, Recall, AUC-ROC, Average Precision,
 
 ---
 
-## 🛠️ Requirements
+##  Requirements
 
 ```bash
 pip install torch torchvision torchaudio
@@ -84,7 +84,7 @@ pip install imbalanced-learn shap networkx xgboost scikit-learn
 
 ---
 
-## 📂 Dataset
+##  Dataset
 
 The notebook expects CSV files at:
 
@@ -103,7 +103,7 @@ To run locally, update `CFG['data_path']` to point to your local data directory.
 
 ---
 
-## ⚙️ Configuration
+##  Configuration
 
 All hyperparameters are controlled through the `CFG` dictionary at the top of the notebook:
 
@@ -127,7 +127,7 @@ CFG = {
 
 ---
 
-## 📊 Outputs
+##  Outputs
 
 The notebook generates the following files upon completion:
 
@@ -154,17 +154,7 @@ The notebook generates the following files upon completion:
 
 ---
 
-## 🐛 Bugs Fixed (v4)
-
-| # | Location | Bug | Fix |
-|---|----------|-----|-----|
-| 1 | Phase 2 — graph viz | `rx_0` nodes added to graph but had no position entry → `KeyError` | Build transmitter-only graph with distance-based edges; every node has a known position |
-| 2 | Phase 6C — graph dataset | After `remove_outliers`, `train_df` was shorter than `raw_df` → `ValueError: Length mismatch` | Keep position columns inside split DataFrames from the start; no external re-assignment |
-| 3 | Phase 7B — model init | Variable `F = CFG['gat_in_feats']` shadowed `import torch.nn.functional as F` → `AttributeError` | Renamed to `IN_FEATS` everywhere |
-
----
-
-## 📈 Proactive Rerouting
+##  Proactive Rerouting
 
 The trained STGAT is used to simulate a **proactive rerouting policy**:
 
