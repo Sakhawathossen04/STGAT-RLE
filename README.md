@@ -1,6 +1,6 @@
 # STGAT-RLE: A Spatio-Temporal Graph Attention Network with Cross-Modal Gating for Proactive Radio Link Failure Prediction in MANETs
 
-**Official implementation** of the paper accepted at **ACML 2026**.
+'''**Official implementation** of the paper accepted at **ACML 2026**.'''
 
 > **STGAT-RLE** models dynamic spatial neighborhood dependencies via Graph Attention Networks (GAT) and temporal RF dynamics via Transformer encoders, fused through a novel **feature-wise cross-modal gating** mechanism. This enables selective modulation between spatial contagion and temporal degradation signals for highly calibrated proactive link failure prediction in Mobile Ad Hoc Networks (MANETs).
 
