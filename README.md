@@ -1,171 +1,142 @@
-# STGAT-RLE: Spatio-Temporal Graph Attention Transformer for Radio Link Failure Estimation in MANETs
+# STGAT-RLE: A Spatio-Temporal Graph Attention Network with Cross-Modal Gating for Proactive Radio Link Failure Prediction in MANETs
 
-> Predicting radio link failures in Mobile Ad hoc Networks using a novel fusion of Graph Attention Networks and Transformer-based temporal encoding.
+**Official implementation** of the paper accepted at **ACML 2026**.
 
+> **STGAT-RLE** models dynamic spatial neighborhood dependencies via Graph Attention Networks (GAT) and temporal RF dynamics via Transformer encoders, fused through a novel **feature-wise cross-modal gating** mechanism. This enables selective modulation between spatial contagion and temporal degradation signals for highly calibrated proactive link failure prediction in Mobile Ad Hoc Networks (MANETs).
 
-
----
-
-##  File
-
-| File | Description |
-|------|-------------|
-| `radio-link-estimation-model.ipynb` | Complete end-to-end pipeline: data loading, EDA, feature engineering, model training, evaluation, ablation, explainability, and rerouting simulation |
+[![arXiv](https://img.shields.io/badge/arXiv-Preprint-b31b1b.svg)](https://arxiv.org/abs/...) 
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/stgat-rle-a-spatio-temporal-graph-attention/manet-link-failure-prediction)](https://paperswithcode.com/sota/manet-link-failure-prediction?p=stgat-rle-a-spatio-temporal-graph-attention)
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.1%2B-EE4C2C)
+![PyG](https://img.shields.io/badge/PyTorch_Geometric-2.x-FF6B6B)
 
 ---
 
-##  Overview
+##  Key Contributions 
 
-Radio link failures in **Mobile Ad hoc Networks (MANETs)** cause packet loss and costly reactive rerouting. This project proposes **STGAT** — a Spatio-Temporal Graph Attention Transformer — that fuses two complementary views of the network:
+1. **Feature-wise Cross-Modal Gating**: Bidirectional mutual modulation between GAT spatial representations and Transformer temporal representations — outperforms simple concatenation in calibration (ECE 0.0218 vs 0.0713).
+2. **Comprehensive Spatio-Temporal Benchmarking**: Strong performance against STGCN, DCRNN, Graph WaveNet, and strong temporal baselines.
+3. **Imbalance-Aware Training**: Focal Loss + Weighted Random Sampling.
+4. **Explainability**: Gradient-based feature attribution + GAT attention analysis. Neighborhood failure rate and topological features are dominant transferable predictors.
+5. **Cross-Simulator Generalization**: Zero-shot evaluation on independent NS-3 dataset.
+6. **Proactive Rerouting Impact**: 94.9% reduction in packet-equivalent overhead.
 
-- **Spatial branch (GAT):** captures inter-node dependencies by building a k-nearest-neighbor graph of transmitters and applying multi-head Graph Attention Convolution.
-- **Temporal branch (Transformer):** encodes the historical RF signal sequence for each node using a Transformer Encoder with sinusoidal positional encoding.
-
-The fused representation is passed through an MLP classifier trained with **Focal Loss** to handle the severe class imbalance between active and failed links.
+**Paper PDF**: [paper_STGAT_RLE_for_ACML_final.pdf](paper_STGAT_RLE_for_ACML_final.pdf) (included in repo)
 
 ---
 
-##  Pipeline
+##  Project Structure
 
 ```
-Phase 1  →  Setup, dependencies, dataset loading
-Phase 1D →  Exploratory Data Analysis (SNR, PowerReception, class distribution)
-Phase 2  →  MANET graph construction & visualisation (NetworkX)
-Phase 3  →  Feature engineering + outlier removal + train/val/test split
-Phase 4  →  Class imbalance handling (SMOTETomek)
-Phase 5  →  Sequential DataLoaders with WeightedRandomSampler
-Phase 6A →  Baseline model definitions (LSTM, BiLSTM, Transformer)
-Phase 6C →  Graph dataset construction + STGAT model definition
-Phase 7  →  Training & evaluation utilities
-Phase 7B →  Training all models (XGBoost, RF, LSTM, BiLSTM, Transformer, STGAT)
-Phase 7C →  Results table + comparison plots + confusion matrix + training curves
-Phase 8  →  Ablation study (w/o GAT / w/o Transformer / w/o Focal Loss)
-Phase 9  →  SHAP explainability (XGBoost TreeExplainer)
-Phase 10 →  Proactive rerouting cost simulation
-Phase 11 →  Model checkpointing
+STGAT-RLE/
+├── data/                          # Preprocessed OMNeT++ + NS-3 datasets
+├── notebooks/
+│   └── stgat_rle_full_pipeline.ipynb   # End-to-end reproduction
+├── src/
+│   ├── models/                    # STGAT-RLE, baselines (STGCN, DCRNN, Graph WaveNet, etc.)
+│   ├── data/                      # Dynamic graph construction, feature engineering
+│   ├── utils/                     # Training, evaluation, calibration, explainability
+│   └── loss/                      # Focal Loss implementation
+├── configs/                       # Hyperparameters (CFG)
+├── results/                       # Tables, plots, ablation results
+├── scripts/                       # Training scripts
+├── requirements.txt
+├── README.md
+└── paper_STGAT_RLE_for_ACML_final.pdf
 ```
 
 ---
 
-##  Models Compared
+##  Quick Start
 
-| Model | Type |
-|-------|------|
-| XGBoost | Gradient Boosted Trees |
-| Random Forest | Ensemble |
-| LSTM | Recurrent |
-| BiLSTM | Bidirectional Recurrent |
-| Temporal Transformer | Attention-based sequence model |
-| **STGAT (Proposed)** | **Spatio-Temporal Graph Attention Transformer** |
-
-All models are evaluated on **F1, Precision, Recall, AUC-ROC, Average Precision, and Error Rate**.
-
----
-
-##  Key Features
-
-- **Graph-based spatial modeling** — k-NN transmitter graph with 2-layer GATConv (`add_self_loops=False` for compatibility)
-- **Focal Loss** (α = 0.75, γ = 2.0) to address class imbalance
-- **SMOTETomek** oversampling on training data
-- **WeightedRandomSampler** for balanced mini-batches
-- **CosineAnnealingLR** scheduler with early stopping
-- **SHAP** feature importance via XGBoost TreeExplainer
-- **Proactive rerouting simulation** quantifying packet-cost savings
-
----
-
-##  Requirements
+### 1. Installation
 
 ```bash
-pip install torch torchvision torchaudio
-pip install torch-geometric
-pip install imbalanced-learn shap networkx xgboost scikit-learn
+git clone https://github.com/yourusername/STGAT-RLE.git
+cd STGAT-RLE
+pip install -r requirements.txt
 ```
 
-> Tested with **PyTorch 2.1.0**. Ensure `torch-geometric` version is compatible with your PyTorch + CUDA version. See [PyG installation guide](https://pytorch-geometric.readthedocs.io/en/latest/install/installation.html).
+**Key Dependencies**:
+- PyTorch + Torch-Geometric
+- PyTorch Lightning (optional)
+- scikit-learn, pandas, networkx, matplotlib, seaborn
+- captum (for gradient attribution)
 
----
+### 2. Data Preparation
 
-##  Dataset
+Download/preprocess OMNeT++ and NS-3 datasets (scripts provided). Expected structure includes RF KPIs, positions, and link failure labels.
 
-The notebook expects CSV files at:
+### 3. Training
 
-```
-/kaggle/input/radio-link-estimation-data-preprocessing/*.csv
-```
-
-Each CSV should contain columns including:
-
-- `IdTransmitter`, `DatasetID`
-- `PositionTransmission0/1/2`, `PositionReception0/1/2`
-- `SNR`, `PowerReception`
-- `Link` (binary label: 0 = active, 1 = failed)
-
-To run locally, update `CFG['data_path']` to point to your local data directory.
-
----
-
-##  Configuration
-
-All hyperparameters are controlled through the `CFG` dictionary at the top of the notebook:
-
-```python
-CFG = {
-    'train_ratio'   : 0.8,
-    'val_ratio'     : 0.1,
-    'k_neighbors'   : 5,       # k-NN graph for GAT
-    'time_steps'    : 32,      # sequence length
-    'batch_size'    : 256,
-    'epochs'        : 150,
-    'lr'            : 3e-4,
-    'patience'      : 15,
-    'gat_hidden'    : 64,
-    'gat_heads'     : 4,
-    'trans_d_model' : 128,
-    'trans_layers'  : 3,
-    ...
-}
+```bash
+python scripts/train.py --config configs/stgat_rle.yaml
 ```
 
----
-
-##  Outputs
-
-The notebook generates the following files upon completion:
-
-| File | Description |
-|------|-------------|
-| `eda_distributions.pdf` | SNR & PowerReception class distributions |
-| `eda_correlation.pdf` | Feature correlation with link failure |
-| `graph_snapshot.pdf` | MANET topology visualisation |
-| `results_comparison.pdf` | Bar chart comparing all models |
-| `results_comparison.csv` | Numerical results table |
-| `stgat_cm.pdf` | STGAT confusion matrix |
-| `training_curves.pdf` | Loss & F1 curves per epoch |
-| `ablation_study.pdf` | Ablation F1 comparison |
-| `ablation_results.csv` | Ablation numerical results |
-| `shap_summary.pdf` | SHAP feature importance plot |
-| `proactive_rerouting.pdf` | Cost comparison: reactive vs. proactive |
-| `stgat_best.pth` | STGAT model weights |
-| `lstm_best.pth` | LSTM model weights |
-| `bilstm_best.pth` | BiLSTM model weights |
-| `transformer_best.pth` | Temporal Transformer weights |
-| `xgboost_best.json` | XGBoost model |
-| `rf_best.pkl` | Random Forest model |
-| `scaler.pkl` | Fitted StandardScaler |
+**Main Configuration Highlights** :
+- Lookback `T=32`
+- Neighborhood `k=5`
+- GAT: 2 layers, multi-head attention
+- Transformer: 3 layers, `d_model=128`
+- Cross-modal gating + residual fusion
+- Focal Loss (`α=0.75`, `γ=2.0`)
+- AdamW + Cosine Annealing
 
 ---
 
-##  Proactive Rerouting
+## 📊 Results (OMNeT++ Test Set)
 
-The trained STGAT is used to simulate a **proactive rerouting policy**:
+| Model              | F1     | Precision | Recall | AUC    | ECE↓   |
+|--------------------|--------|-----------|--------|--------|--------|
+| Graph WaveNet     | 0.9647 | 0.9641    | 0.9654 | 0.9838 | 0.0846 |
+| STGCN             | 0.9621 | 0.9557    | **0.9686** | 0.9855 | 0.0526 |
+| **STGAT-RLE (Ours)** | **0.9596** | 0.9674 | 0.9519 | **0.9842** | **0.0262** |
+| BiLSTM (best temporal) | 0.9513 | 0.9626 | 0.9403 | 0.9763 | **0.0239** |
 
-- **Reactive cost** — every actual failure incurs 50 packet-equivalent units.
-- **Proactive cost** — missed detections (FN) cost 50 units; false alarms (FP) cost only 5 units.
-- The model's early predictions are shown to significantly reduce total network cost vs. purely reactive rerouting.
+- **Best calibration** among spatio-temporal models.
+- Strong cross-simulator performance on NS-3 (zero-shot).
+
+**Full tables** and ablation studies available in `results/`.
 
 ---
-  
-## 📬 Contact
 
-For questions or collaboration, please open an issue in this repository.
+## 🔬 Ablation Studies
+
+**Cross-Modal Gating** significantly improves calibration over concatenation.
+
+**Spatial Encoders**: GAT shows highest recall.
+
+Detailed results in the paper (Section 6) and notebook.
+
+---
+
+## 📈 Explainability
+
+- Gradient-based feature importance (Captum).
+- Neighborhood failure rate (`ρ_fail`) and node degree are top operationally transferable features.
+- **Time** feature (simulator leakage) explicitly analyzed and discounted.
+
+See `notebooks/stgat_rle_full_pipeline.ipynb` for SHAP/Gradient visualizations.
+
+---
+
+## 🛠️ Proactive Rerouting Simulation
+
+Static cost-impact evaluation shows **94.9%** reduction in overhead vs. reactive AODV-style recovery.
+
+---
+
+## 🧪 Cross-Simulator Validation
+
+Trained only on OMNeT++, evaluated zero-shot on NS-3. Competitive generalization (Graph WaveNet slightly better on NS-3).
+
+---
+
+
+## 📬 Contact & Contributing
+
+- Open issues for questions/bugs.
+- Pull requests welcome for extensions (real-world datasets, federated learning, adaptive k, etc.).
+- Full reproducibility materials (datasets, trained weights) available upon reasonable request.
+
+---
