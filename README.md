@@ -1,4 +1,4 @@
-# STGAT-RLE: A Spatio-Temporal Graph Attention Network with Cross-Modal Gating for Proactive Radio Link Failure Prediction in MANETs
+# STGAT-RLE: A Spatio-Temporal Graph Attention Network with Cross-Modal Gating for Proactive Radio Link Failure Prediction in MANETs.
 
 **Official implementation** of the paper Under Review at **ACML 2026**.
 
