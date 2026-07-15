@@ -84,7 +84,7 @@ python scripts/train.py --config configs/stgat_rle.yaml
 
 ---
 
-## 📊 Results (OMNeT++ Test Set)
+##  Results (OMNeT++ Test Set)
 
 | Model              | F1     | Precision | Recall | AUC    | ECE↓   |
 |--------------------|--------|-----------|--------|--------|--------|
@@ -100,7 +100,7 @@ python scripts/train.py --config configs/stgat_rle.yaml
 
 ---
 
-## 🔬 Ablation Studies
+##  Ablation Studies
 
 **Cross-Modal Gating** significantly improves calibration over concatenation.
 
@@ -110,7 +110,7 @@ Detailed results in the paper (Section 6) and notebook.
 
 ---
 
-## 📈 Explainability
+##  Explainability
 
 - Gradient-based feature importance (Captum).
 - Neighborhood failure rate (`ρ_fail`) and node degree are top operationally transferable features.
@@ -120,20 +120,20 @@ See `notebooks/stgat_rle_full_pipeline.ipynb` for SHAP/Gradient visualizations.
 
 ---
 
-## 🛠️ Proactive Rerouting Simulation
+##  Proactive Rerouting Simulation
 
 Static cost-impact evaluation shows **94.9%** reduction in overhead vs. reactive AODV-style recovery.
 
 ---
 
-## 🧪 Cross-Simulator Validation
+##  Cross-Simulator Validation
 
 Trained only on OMNeT++, evaluated zero-shot on NS-3. Competitive generalization (Graph WaveNet slightly better on NS-3).
 
 ---
 
 
-## 📬 Contact & Contributing
+##  Contact & Contributing
 
 - Open issues for questions/bugs.
 - Pull requests welcome for extensions (real-world datasets, federated learning, adaptive k, etc.).
